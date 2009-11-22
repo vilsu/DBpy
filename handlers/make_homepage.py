@@ -1,3 +1,9 @@
+import os 
+import pg
+from pg import DB 
+import sys
+con1 = pg.DB('tkk', 'localhost', 5432, None, None, 'noa', '123')
+
 def create_file_name( file_name, file_id ):
     print """<div id='mainheader'>
              <h2>
@@ -9,7 +15,6 @@ def create_file_name( file_name, file_id ):
             """
 
 def get_raw_data( file_id ) {
-        con1 = connect("host=localhost port=5432 dbname=noaa user=noaa password=123");
         # to get fileName and fileID
         result = con1.query( 
             'SELECT file_name, file_id
@@ -18,4 +23,7 @@ def get_raw_data( file_id ) {
             WHERE file_id = $1',
             array( file_id ) 
             );
-        return $result;
+        return result;
+    
+
+

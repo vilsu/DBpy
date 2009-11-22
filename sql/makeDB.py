@@ -1,9 +1,27 @@
-import os 
+import os
 import pg
-from pg import DB 
+from pg import DB
 import sys
-    
+
 con1 = pg.DB('tkk', 'localhost', 5432, None, None, 'noa', '123')
+
+def make_tables(con1):
+    con1.query("""CREATE TABLE courses (
+        course_id       INTEGER,
+        course_nro      VARCHAR(320),
+        course_vaihe    integer DEFAULT 0,
+        subject         VARCHAR(320))
+    """)
+    con1.query("""CREATE TABLE files (
+        file_id         integer,
+        course_id       integer,
+        file            BYTEA NOT NULL,
+        file_name       VARCHAR(320),
+        time_received   TIMESTAMP NOT NULL default now(),
+        professor       VARCHAR(320))
+    """)
+make_tables(con1)
+
 
 # get pdf-files
 def get_pdf_files(con1):
@@ -25,17 +43,3 @@ def put_pdf_files_in(con1):
         )
 
 put_pdf_files_in(con1)
-
-def make_tables(con1):
-    con1.query("""CREATE TABLE courses VALUES(
-    course_id   SERIAL PRIMARY,
-    course_nro  VARCHAR(320),
-    subject     VARCHAR(320)
-    """)
-    con1.query("""CREATE TABLE files VALUES(
-    file_id SERIAL PRIMARY,
-    file    BYTEA NOT NULL,
-    file_name   VARCHAR(320),
-    time_received   TIMESTAMP NOT NULL default now(),
-    professor   VARCHAR(320)""")
-    )
